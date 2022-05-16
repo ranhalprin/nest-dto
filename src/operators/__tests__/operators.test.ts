@@ -110,5 +110,22 @@ describe('class.operators', () => {
             const barErrors = await validate(plainToClass(Bar, plain));
             expect(barErrors).toHaveLength(0);
         });
+        it('Does not remove a field implemented by extending class', () => {
+            class SubBar extends Bar {
+                @IsString()
+                bar!: string;
+
+                @IsString()
+                baz!: string;
+            }
+            const plain = {
+                bar: 'bar',
+                baz: 'baz',
+            };
+            expect(plainToClass(SubBar, plain)).toEqual({
+                bar: 'bar',
+                baz: 'baz',
+            });
+        });
     });
 });
